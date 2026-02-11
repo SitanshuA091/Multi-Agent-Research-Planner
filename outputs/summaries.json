@@ -1,0 +1,146 @@
+[
+  {
+    "keyword": "DCGAN architecture",
+    "summaries": [
+      {
+        "source_type": "arxiv",
+        "title": "Architectural Implications of Graph Neural Networks",
+        "url": "http://arxiv.org/abs/2009.00804v2",
+        "key_points": [
+          "Graph Neural Networks (GNNs) are high-accuracy deep learning models for graph structures, but their system and architectural implications are not well understood by the system community compared to MLPs and CNNs.",
+          "Prior characterization work for GNNs has been limited, primarily focusing only on Graph Convolutional Networks (GCNs).",
+          "This research introduces GNNs to the system and architecture community by covering a large variety of GNN workloads based on a general GNN description framework.",
+          "The methodology involves characterizing GNN computation at the inference stage, with models constructed using two widely-used libraries.",
+          "The characterization specifically examines GNN performance concerning both general-purpose and application-specific architectures.",
+          "The work aims to foster more system and architecture research specifically tailored for GNNs."
+        ],
+        "original_length": 881,
+        "summary_length": 850
+      },
+      {
+        "source_type": "arxiv",
+        "title": "Dalorex: A Data-Local Program Execution and Architecture for Memory-bound Applications",
+        "url": "http://arxiv.org/abs/2207.13219v4",
+        "key_points": [
+          "Memory-bound applications, such as graph or sparse linear algebra workloads, suffer from persistent memory bottlenecks and poor core utilization, with existing Processing-in-Memory (PIM) solutions failing due to scheduling overheads and high memory-per-core ratios.",
+          "Dalorex is introduced as a hardware-software co-design engineered to achieve high parallelism and energy efficiency, demonstrating strong scaling for these memory-bound applications.",
+          "It features a tile-based distributed-memory architecture where each processing tile holds an equal amount of data, ensuring all memory operations are local.",
+          "Dalorex employs a task-based parallel programming model where tasks are executed by the processing unit co-located with the target data, supported by a data placement strategy that improves work balance.",
+          "The system includes a network design optimized for irregular traffic, utilizing one-way messages without routing metadata, and novel traffic-aware task scheduling hardware to maintain high core utilization.",
+          "Dalorex achieves strong scaling with over 16,000 cores for graph and sparse linear algebra workloads, providing the greatest scalability to date for graph algorithms.",
+          "Compared to prior PIM work using 256 cores, Dalorex significantly improves performance and energy consumption by two orders of magnitude."
+        ],
+        "original_length": 1764,
+        "summary_length": 1315
+      }
+    ]
+  },
+  {
+    "keyword": "deep convolutional GANs",
+    "summaries": [
+      {
+        "source_type": "wikipedia",
+        "title": "Convolutional neural network",
+        "url": "https://en.wikipedia.org/wiki/Convolutional_neural_network",
+        "key_points": [
+          "A Convolutional Neural Network (CNN) is a type of feedforward neural network that learns features from data primarily through the optimization of internal filters.",
+          "This deep learning architecture is highly versatile, applied to process and make predictions across various data types, including text, images, and audio.",
+          "CNNs have become the de-facto standard in deep learning-based approaches for computer vision and image processing, excelling at automated feature extraction.",
+          "Their core technical contribution lies in their ability to automatically learn hierarchical features, reducing the need for manual feature engineering in complex data tasks.",
+          "Despite their widespread success, CNNs have recently begun to be superseded in some applications by newer deep learning architectures, such as the transformer."
+        ],
+        "original_length": 493,
+        "summary_length": 806
+      }
+    ]
+  },
+  {
+    "keyword": "mode collapse prevention",
+    "summaries": [
+      {
+        "source_type": "wikipedia",
+        "title": "Francis Scott Key Bridge collapse",
+        "url": "https://en.wikipedia.org/wiki/Francis_Scott_Key_Bridge_collapse",
+        "key_points": [
+          "The Francis Scott Key Bridge experienced a catastrophic collapse on March 26, 2024, involving its main spans and three nearest northeast approach spans over the Patapsco River.",
+          "The structural failure was directly caused by the container ship Dali striking one of the bridge piers.",
+          "The Dali's impact resulted from catastrophic power outages that impaired its control systems, leading to a loss of maneuverability.",
+          "The collapse led to the immediate deaths of six members of a maintenance crew working on the roadway.",
+          "One maintenance crew member was successfully rescued from the river following the incident.",
+          "An inspector was also rescued from the remaining structure of the bridge."
+        ],
+        "original_length": 522,
+        "summary_length": 675
+      }
+    ]
+  },
+  {
+    "keyword": "adversarial training methods",
+    "summaries": [
+      {
+        "source_type": "wikipedia",
+        "title": "Generative adversarial network",
+        "url": "https://en.wikipedia.org/wiki/Generative_adversarial_network",
+        "key_points": [
+          "A Generative Adversarial Network (GAN) is a class of machine learning frameworks designed for generative artificial intelligence.",
+          "It stands as a prominent framework for developing generative AI solutions.",
+          "The concept of GANs was initially introduced by Ian Goodfellow and his colleagues in June 2014.",
+          "GANs operate on a unique methodology involving two neural networks that compete against each other.",
+          "This competition is structured as a zero-sum game, meaning one agent's gain in performance directly corresponds to the other agent's loss."
+        ],
+        "original_length": 379,
+        "summary_length": 535
+      }
+    ]
+  },
+  {
+    "keyword": "conditional DCGANs",
+    "summaries": [
+      {
+        "source_type": "wikipedia",
+        "title": "Data augmentation",
+        "url": "https://en.wikipedia.org/wiki/Data_augmentation",
+        "key_points": [
+          "Data augmentation is a statistical technique enabling maximum likelihood estimation (MLE) from incomplete data.",
+          "The core methodology involves generating and utilizing several slightly-modified copies of existing data.",
+          "It has important applications in Bayesian analysis, demonstrating its utility in advanced statistical modeling.",
+          "In machine learning, data augmentation is widely employed to enhance model performance and generalization.",
+          "A key practical implication in machine learning is its effectiveness in reducing overfitting when training models.",
+          "This reduction in overfitting is achieved by training models on the expanded, diverse set of slightly-modified data copies."
+        ],
+        "original_length": 372,
+        "summary_length": 670
+      },
+      {
+        "source_type": "arxiv",
+        "title": "De Finettian Logics of Indicative Conditionals",
+        "url": "http://arxiv.org/abs/1901.10266v2",
+        "key_points": [
+          "The paper investigates trivalent truth conditions for indicative conditionals, focusing on de Finetti's \"defective\" table where a conditional is Indeterminate when its antecedent is false.",
+          "The central problem is choosing an adequate notion of validity for this conditional, as all standard trivalent schemes prove problematic.",
+          "One solution pairs de Finetti's conditional (DF) with validity defined as the preservation of non-False values (TT-validity), but this approach sacrifices Modus Ponens.",
+          "An alternative strategy modifies de Finetti's truth table, specifically using the Cooper-Cantwell (CC) variant, to successfully restore Modus Ponens.",
+          "The paper presents both the DF/TT and CC/TT alternatives, followed by an in-depth treatment of their respective proof theories.",
+          "A key finding is that both DF/TT and CC/TT are characterized as connexive logics, exhibiting significantly different algebraic properties."
+        ],
+        "original_length": 1102,
+        "summary_length": 907
+      },
+      {
+        "source_type": "arxiv",
+        "title": "BI-DCGAN: A Theoretically Grounded Bayesian Framework for Efficient and Diverse GANs",
+        "url": "http://arxiv.org/abs/2510.26892v1",
+        "key_points": [
+          "Generative Adversarial Networks (GANs) are limited by mode collapse, producing narrow output ranges and lacking diversity, which is critical for real-world applications requiring uncertainty awareness.",
+          "The paper introduces BI-DCGAN, a Bayesian extension of DCGAN designed to integrate model uncertainty into the generative process while maintaining computational efficiency.",
+          "BI-DCGAN achieves this by employing Bayes by Backprop to learn a distribution over network weights and utilizing mean-field variational inference for efficient posterior approximation during training.",
+          "It establishes the first theoretical proof, based on covariance matrix analysis, demonstrating that Bayesian modeling fundamentally enhances sample diversity in GANs.",
+          "Extensive experiments on standard benchmarks validate that BI-DCGAN produces more diverse and robust outputs than conventional DCGANs, while maintaining training efficiency.",
+          "BI-DCGAN offers a scalable and timely solution for applications where diversity and uncertainty are crucial, serving as an efficient alternative to resource-intensive modern models like diffusion models."
+        ],
+        "original_length": 1398,
+        "summary_length": 1115
+      }
+    ]
+  }
+]

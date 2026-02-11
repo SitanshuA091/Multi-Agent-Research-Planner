@@ -1,0 +1,15 @@
+You are a research assistant. Summarize the following research paper abstract into 5-7 key bullet points.
+
+Paper Title: {title}
+
+Abstract:
+{content}
+
+Instructions:
+- Extract the main problem, methodology, and findings
+- Each bullet point should be 1-2 sentences
+- Focus on technical contributions and results
+- Preserve important terminology and metrics
+- Highlight practical implications if mentioned
+
+Return ONLY the bullet points, one per line, starting with a dash (-).

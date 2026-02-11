@@ -1,0 +1,82 @@
+[
+  {
+    "keyword": "DCGAN architecture",
+    "wikipedia": {
+      "source": "wikipedia",
+      "title": "",
+      "url": "",
+      "content": ""
+    },
+    "arxiv_papers": [
+      {
+        "source": "arxiv",
+        "title": "Architectural Implications of Graph Neural Networks",
+        "url": "http://arxiv.org/abs/2009.00804v2",
+        "published": "2020-09-02",
+        "abstract": "Graph neural networks (GNN) represent an emerging line of deep learning models that operate on graph structures. It is becoming more and more popular due to its high accuracy achieved in many graph-related tasks. However, GNN is not as well understood in the system and architecture community as its counterparts such as multi-layer perceptrons and convolutional neural networks. This work tries to introduce the GNN to our community. In contrast to prior work that only presents characterizations of GCNs, our work covers a large portion of the varieties for GNN workloads based on a general GNN description framework. By constructing the models on top of two widely-used libraries, we characterize the GNN computation at inference stage concerning general-purpose and application-specific architectures and hope our work can foster more system and architecture research for GNNs."
+      },
+      {
+        "source": "arxiv",
+        "title": "Dalorex: A Data-Local Program Execution and Architecture for Memory-bound Applications",
+        "url": "http://arxiv.org/abs/2207.13219v4",
+        "published": "2022-07-26",
+        "abstract": "Applications with low data reuse and frequent irregular memory accesses, such as graph or sparse linear algebra workloads, fail to scale well due to memory bottlenecks and poor core utilization. While prior work with prefetching, decoupling, or pipelining can mitigate memory latency and improve core utilization, memory bottlenecks persist due to limited off-chip bandwidth. Approaches doing processing in-memory (PIM) with Hybrid Memory Cube (HMC) overcome bandwidth limitations but fail to achieve high core utilization due to poor task scheduling and synchronization overheads. Moreover, the high memory-per-core ratio available with HMC limits strong scaling.\n  We introduce Dalorex, a hardware-software co-design that achieves high parallelism and energy efficiency, demonstrating strong scaling with &gt;16,000 cores when processing graph and sparse linear algebra workloads. Over the prior work in PIM, both using 256 cores, Dalorex improves performance and energy consumption by two orders of magnitude through (1) a tile-based distributed-memory architecture where each processing tile holds an equal amount of data, and all memory operations are local; (2) a task-based parallel programming model where tasks are executed by the processing unit that is co-located with the target data; (3) a network design optimized for irregular traffic, where all communication is one-way, and messages do not contain routing metadata; (4) novel traffic-aware task scheduling hardware that maintains high core utilization; and (5) a data placement strategy that improves work balance.\n  This work proposes architectural and software innovations to provide the greatest scalability to date for running graph algorithms while still being programmable for other domains."
+      }
+    ]
+  },
+  {
+    "keyword": "deep convolutional GANs",
+    "wikipedia": {
+      "source": "wikipedia",
+      "title": "Convolutional neural network",
+      "url": "https://en.wikipedia.org/wiki/Convolutional_neural_network",
+      "content": "A convolutional neural network (CNN) is a type of feedforward neural network that learns features via filter optimization. This type of deep learning network has been applied to process and make predictions from many different types of data including text, images and audio. CNNs are the de-facto standard in deep learning-based approaches to computer vision and image processing, and have only recently been replaced—in some cases—by newer deep learning architectures such as the transformer."
+    },
+    "arxiv_papers": []
+  },
+  {
+    "keyword": "mode collapse prevention",
+    "wikipedia": {
+      "source": "wikipedia",
+      "title": "Francis Scott Key Bridge collapse",
+      "url": "https://en.wikipedia.org/wiki/Francis_Scott_Key_Bridge_collapse",
+      "content": "On March 26, 2024, the main spans and the three nearest northeast approach spans of the Francis Scott Key Bridge across the Patapsco River in the Baltimore metropolitan area of Maryland, United States, collapsed after one of the bridge piers was struck by the container ship Dali, which had suffered catastrophic power outages that impaired its control systems. Six members of a maintenance crew working on the roadway were killed, one was rescued from the river, and an inspector was rescued from the remaining structure."
+    },
+    "arxiv_papers": []
+  },
+  {
+    "keyword": "adversarial training methods",
+    "wikipedia": {
+      "source": "wikipedia",
+      "title": "Generative adversarial network",
+      "url": "https://en.wikipedia.org/wiki/Generative_adversarial_network",
+      "content": "A generative adversarial network (GAN) is a class of machine learning frameworks and a prominent framework for approaching generative artificial intelligence. The concept was initially developed by Ian Goodfellow and his colleagues in June 2014. In a GAN, two neural networks compete with each other in the form of a zero-sum game, where one agent's gain is another agent's loss."
+    },
+    "arxiv_papers": []
+  },
+  {
+    "keyword": "conditional DCGANs",
+    "wikipedia": {
+      "source": "wikipedia",
+      "title": "Data augmentation",
+      "url": "https://en.wikipedia.org/wiki/Data_augmentation",
+      "content": "Data augmentation is a statistical technique which allows maximum likelihood estimation from incomplete data. Data augmentation has important applications in Bayesian analysis, and the technique is widely used in machine learning to reduce overfitting when training machine learning models, achieved by training models on several slightly-modified copies of existing data."
+    },
+    "arxiv_papers": [
+      {
+        "source": "arxiv",
+        "title": "De Finettian Logics of Indicative Conditionals",
+        "url": "http://arxiv.org/abs/1901.10266v2",
+        "published": "2019-01-29",
+        "abstract": "This paper explores trivalent truth conditions for indicative conditionals, examining the \"defective\" table put forward by de Finetti 1936, as well as Reichenbach 1944, first sketched in Reichenbach 1935. On their approach, a conditional takes the value of its consequent whenever its antecedent is True, and the value Indeterminate otherwise. Here we deal with the problem of choosing an adequate notion of validity for this conditional. We show that all standard trivalent schemes are problematic, and highlight two ways out of the predicament: one pairs de Finetti's conditional (DF) with validity as the preservation of non-False values (TT-validity), but at the expense of Modus Ponens; the other modifies de Finetti's table to restore Modus Ponens. In Part I of this paper, we present both alternatives, with specific attention to a variant of de Finetti's table (CC) proposed by Cooper 1968 and Cantwell 2008. In Part II, we give an in-depth treatment of the proof theory of the resulting logics, DF/TT and CC/TT: both are connexive logics, but with significantly different algebraic properties."
+      },
+      {
+        "source": "arxiv",
+        "title": "BI-DCGAN: A Theoretically Grounded Bayesian Framework for Efficient and Diverse GANs",
+        "url": "http://arxiv.org/abs/2510.26892v1",
+        "published": "2025-10-30",
+        "abstract": "Generative Adversarial Networks (GANs) are proficient at generating synthetic data but continue to suffer from mode collapse, where the generator produces a narrow range of outputs that fool the discriminator but fail to capture the full data distribution. This limitation is particularly problematic, as generative models are increasingly deployed in real-world applications that demand both diversity and uncertainty awareness. In response, we introduce BI-DCGAN, a Bayesian extension of DCGAN that incorporates model uncertainty into the generative process while maintaining computational efficiency. BI-DCGAN integrates Bayes by Backprop to learn a distribution over network weights and employs mean-field variational inference to efficiently approximate the posterior distribution during GAN training. We establishes the first theoretical proof, based on covariance matrix analysis, that Bayesian modeling enhances sample diversity in GANs. We validate this theoretical result through extensive experiments on standard generative benchmarks, demonstrating that BI-DCGAN produces more diverse and robust outputs than conventional DCGANs, while maintaining training efficiency. These findings position BI-DCGAN as a scalable and timely solution for applications where both diversity and uncertainty are critical, and where modern alternatives like diffusion models remain too resource-intensive."
+      }
+    ]
+  }
+]
