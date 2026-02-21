@@ -61,8 +61,8 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 | Agent | Model | Provider | Purpose |
 |-------|-------|----------|---------|
 | Planner | llama-3.3-70b-versatile | Groq | Keyword generation |
-| Summarizer | gemini-2.5-flash-exp | Google | Source summarization |
-| Synthesizer | gemini-3.0-flash-preview | Google | Report synthesis |
+| Summarizer | gemini-3.0-pro=preview | Google | Source summarization |
+| Synthesizer | GPT-OSS(120b) | Groq | Report synthesis |
 
 ### Frameworks & Libraries
 
@@ -84,5 +84,6 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 - Additional source APIs (PubMed, Semantic Scholar)
 - Citation management and bibliography generation
 - Synthesizer feedback loop for completeness checks
+
 
 
