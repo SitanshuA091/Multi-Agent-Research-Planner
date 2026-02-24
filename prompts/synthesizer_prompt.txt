@@ -12,8 +12,24 @@ Instructions:
 - Identify common themes, contradictions, and gaps in the research
 - Use formal academic writing style
 - Each section should have 2-4 well-developed paragraphs
-- Total report should be 800-1200 words
+- Total report should be 600-800 words
 - Do not use bullet points - write in prose paragraphs only
 - Cite sources naturally within the text (e.g., "according to recent research on X...")
+
+IMPORTANT - Character Usage:
+- Use ONLY standard ASCII characters
+- Use regular hyphens (-) instead of em-dashes or en-dashes
+- Use regular quotes (") instead of smart quotes (" ")
+- Use regular apostrophes (') instead of curly apostrophes (' ')
+- Use three periods (...) instead of ellipsis (…)
+- Avoid any special Unicode symbols or characters
+- This ensures the PDF will render correctly without black boxes
+- Ignore any wikipedia images or arxiv images do not embed them from any external sources
+
+CRITICAL FORMATTING RULES:
+- DO NOT use asterisks for bold (**text**) or italics (*text*)
+- DO NOT use hashtags for headings (# Heading)
+- Write section headings as plain text at the start of paragraphs
+- Use simple, clean formatting for PDF conversion
 
 Return the complete research report as continuous prose text.

@@ -1,4 +1,5 @@
 import os
+import re  
 from typing import List, Dict
 from pathlib import Path
 from dotenv import load_dotenv
@@ -10,6 +11,7 @@ from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus import HRFlowable
 from datetime import datetime
 
 load_dotenv()
@@ -28,6 +30,19 @@ class SynthesizerAgent:
     def _load_prompt(self) -> str:
         prompt_file = Path(__file__).parent.parent / "prompts" / "synthesizer_prompt.txt"
         return prompt_file.read_text()
+    
+    def _clean_text_for_pdf(self, text: str) -> str:
+        text = text.replace('—', '-')
+        text = text.replace('–', '-')
+        text = text.replace('"', '"').replace('"', '"')
+        text = text.replace(''', "'").replace(''', "'")
+        text = text.replace('\xa0', ' ')
+        text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)
+        text = re.sub(r'\*([^*]+)\*', r'\1', text)
+        text = re.sub(r'#{1,6}\s*', '', text)
+        text = text.encode('ascii', 'ignore').decode('ascii')
+        
+        return text
     
     def _format_summaries_for_prompt(self, summaries: List[Dict]) -> str:
         formatted = []
@@ -97,8 +112,9 @@ class SynthesizerAgent:
             topMargin=72,
             bottomMargin=18
         )
-
+        
         styles = getSampleStyleSheet()
+        
         title_style = ParagraphStyle(
             'CustomTitle',
             parent=styles['Heading1'],
@@ -116,7 +132,7 @@ class SynthesizerAgent:
             leading=16,
             alignment=TA_JUSTIFY,
             spaceAfter=12,
-            fontName='Times-Roman' 
+            fontName='Times-Roman'
         )
         
         subtitle_style = ParagraphStyle(
@@ -128,43 +144,50 @@ class SynthesizerAgent:
             alignment=TA_CENTER,
             fontName='Helvetica'
         )
-
+        
+        heading_style = ParagraphStyle(
+            'CustomHeading',
+            parent=styles['Heading2'],
+            fontSize=14,
+            textColor='#1a1a1a',
+            spaceAfter=12,
+            spaceBefore=16,
+            fontName='Helvetica-Bold'
+        )
+        
         story = []
-
+        
         title = Paragraph(f"Research Report:<br/>{synthesis['topic']}", title_style)
         story.append(title)
-
+        
         date_str = datetime.now().strftime("%B %d, %Y")
         subtitle = Paragraph(f"Generated on {date_str}", subtitle_style)
         story.append(subtitle)
         story.append(Spacer(1, 0.2*inch))
-
-        from reportlab.platypus import HRFlowable
+        
         story.append(HRFlowable(width="100%", thickness=1, color='#cccccc'))
         story.append(Spacer(1, 0.3*inch))
         
-        report_text = synthesis['report_text']
+        report_text = self._clean_text_for_pdf(synthesis['report_text'])
         paragraphs = report_text.split('\n\n')
         
         for para_text in paragraphs:
             if para_text.strip():
-                if para_text.strip().isupper() or para_text.strip().startswith('#'):
-                    heading_text = para_text.strip().replace('#', '').strip()
-                    heading = Paragraph(heading_text, styles['Heading2'])
-                    story.append(Spacer(1, 0.2*inch))
+                if para_text.strip().isupper() or (len(para_text.strip()) < 100 and ':' not in para_text and para_text.strip().endswith(('Introduction', 'Conclusion', 'Findings', 'Applications', 'Challenges'))):
+                    heading_text = para_text.strip()
+                    heading = Paragraph(heading_text, heading_style)
                     story.append(heading)
-                    story.append(Spacer(1, 0.1*inch))
                 else:
                     para = Paragraph(para_text.strip(), body_style)
                     story.append(para)
-
+        
         story.append(Spacer(1, 0.5*inch))
         
         try:
             doc.build(story)
-            print(f"PDF generated: {output_path}")
+            print(f"✓ PDF generated: {output_path}")
             print("="*80)
         except Exception as e:
-            print(f"Error generating PDF: {e}")
+            print(f"✗ Error generating PDF: {e}")
             print("="*80)
             raise
