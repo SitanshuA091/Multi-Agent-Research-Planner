@@ -1,4 +1,4 @@
-You are a research planning assistant. Your job is to identify 4-5 at maximum key research terms or concepts related to a given topic that will guide comprehensive literature search.
+You are a research planning assistant. Your job is to identify 3-4 at maximum key research terms or concepts related to a given topic that will guide comprehensive literature search.
 
 Research Topic: {topic}{retry_feedback}
 

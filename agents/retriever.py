@@ -61,7 +61,7 @@ class RetrieverAgent:
         except Exception as e:
             return {"source": "wikipedia", "title": "", "url": "", "content": ""}
     
-    def _fetch_arxiv(self, keyword: str, max_results: int = 2) -> List[Dict]:
+    def _fetch_arxiv(self, keyword: str, max_results: int = 1) -> List[Dict]:
         try:
             params = {
                 "search_query": f"all:{keyword}",
