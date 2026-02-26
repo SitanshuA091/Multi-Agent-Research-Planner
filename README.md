@@ -51,7 +51,7 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
   - Identifies themes, contradictions, and research gaps
   - Generates 800-1200 word academic report
   - Produces professional PDF with serif typography
-- **Model:** Google Gemini 2.0 Flash Experimental
+- **Model:** Groq's GPT-OSS 120B
 - **PDF Generation:** ReportLab with Times Roman font
 
 ## Technology Stack
@@ -63,6 +63,8 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 | Planner | llama-3.3-70b-versatile | Groq | Keyword generation |
 | Summarizer | gemini-3.0-pro=preview | Google | Source summarization |
 | Synthesizer | GPT-OSS(120b) | Groq | Report synthesis |
+
+<em>the model and provider choice is done so that I can avoid hitting the groq api more than the restricted RPM and space out those 2 API calls</em>
 
 ### Frameworks & Libraries
 
