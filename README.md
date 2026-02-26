@@ -80,7 +80,6 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 
 ## Future Enhancements
 
-- Web interface (Streamlit or React)
 - Additional source APIs (PubMed, Semantic Scholar)
 - Citation management and bibliography generation
 - Synthesizer feedback loop for completeness checks
