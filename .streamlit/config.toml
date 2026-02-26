@@ -1,0 +1,20 @@
+[theme]
+headingFontWeights=400
+baseFontSize = 15
+font = "Source Code"
+headingFont= "Merriweather"
+base = "dark"
+textColor = "rgb(255, 255, 255)"
+backgroundColor = "rgb(52, 52, 51)"
+secondaryBackgroundColor = "#231f1fff"
+
+
+[theme.sidebar]
+baseFontSize = 19
+font = "Source Code"
+headingFont = "Merriweather"
+textColor = "rgb(255, 255, 255)"
+backgroundColor = "#231f1fff"
+secondaryBackgroundColor = "rgb(52, 52, 51)"
+showWidgetBorder = true
+borderColor = "rgb(250, 245, 245)"

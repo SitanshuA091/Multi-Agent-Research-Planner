@@ -8,23 +8,20 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import HRFlowable
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, HRFlowable
 from datetime import datetime
 
 load_dotenv()
 
 
 class SynthesizerAgent:
+    
     def __init__(self, model_name: str = "openai/gpt-oss-120b"):
         self.llm = ChatGroq(
             model=model_name,
-            temperature=0.4,  # higher for more creative synthesis
+            temperature=0.4,
             groq_api_key=os.getenv("GROQ_API_KEY")
         )
-
         self.prompt_template = self._load_prompt()
     
     def _load_prompt(self) -> str:
@@ -65,11 +62,6 @@ class SynthesizerAgent:
         return "\n".join(formatted)
     
     def synthesize(self, summaries: List[Dict], topic: str) -> Dict[str, str]:
-        print("\n" + "="*80)
-        print("SYNTHESIZER AGENT")
-        print("="*80)
-        print(f"\nSynthesizing research report for: {topic}")
-        
         formatted_summaries = self._format_summaries_for_prompt(summaries)
         
         prompt = self.prompt_template.format(
@@ -78,12 +70,8 @@ class SynthesizerAgent:
         )
         
         try:
-            print("  Generating synthesis...")
             response = self.llm.invoke(prompt)
             report_text = response.content if hasattr(response, 'content') else str(response)
-            
-            print(f"✓ Synthesis complete ({len(report_text)} characters)")
-            print("="*80)
             
             return {
                 'topic': topic,
@@ -92,7 +80,6 @@ class SynthesizerAgent:
             }
             
         except Exception as e:
-            print(f"✗ Error during synthesis: {e}")
             return {
                 'topic': topic,
                 'report_text': f"Error generating synthesis: {str(e)}",
@@ -100,10 +87,6 @@ class SynthesizerAgent:
             }
     
     def generate_pdf(self, synthesis: Dict[str, str], output_path: str):
-        print("\n" + "="*80)
-        print("GENERATING PDF REPORT")
-        print("="*80)
-        
         doc = SimpleDocTemplate(
             output_path,
             pagesize=letter,
@@ -185,9 +168,5 @@ class SynthesizerAgent:
         
         try:
             doc.build(story)
-            print(f"✓ PDF generated: {output_path}")
-            print("="*80)
         except Exception as e:
-            print(f"✗ Error generating PDF: {e}")
-            print("="*80)
             raise

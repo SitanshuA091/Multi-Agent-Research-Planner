@@ -8,6 +8,7 @@ dependencies = [
     "langchain-google-genai>=4.2.0",
     "langchain-groq>=1.1.1",
     "langgraph>=1.0.7",
+    "pillow>=12.1.0",
     "python-dotenv>=1.2.1",
     "reportlab>=4.4.10",
     "streamlit>=1.53.1",
