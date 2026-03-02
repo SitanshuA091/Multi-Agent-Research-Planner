@@ -64,7 +64,7 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 | Summarizer | gemini-3.0-pro=preview | Google | Source summarization |
 | Synthesizer | GPT-OSS(120b) | Groq | Report synthesis |
 
-<em>the model and provider choice is done so that I can avoid hitting the groq api more than the restricted RPM and space out those 2 API calls</em>
+<em>the model and provider choice is done so that I can avoid hitting the groq api more than the restricted RPM and space out those 2 API calls ince we are ung tthe free tiers</em>
 
 ### Frameworks & Libraries
 
@@ -85,6 +85,7 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 - Additional source APIs (PubMed, Semantic Scholar)
 - Citation management and bibliography generation
 - Synthesizer feedback loop for completeness checks
+
 
 
 
