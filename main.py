@@ -12,17 +12,102 @@ icon = Image.open("icon3.png")
 gradient_css = """
 <style>
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(
-        135deg,
-        #373737, 
-        #2a2a2a, 
-        #1e1e1e 
+    background: radial-gradient(
+        circle at top,
+        #373748,
+        #2a2a2b,
+        #1e1e1d
     );
 }
 </style>
 """
 
 st.markdown(gradient_css, unsafe_allow_html=True)
+
+button_css = """
+<style>
+/* Style all buttons EXCEPT the Start button */
+.stButton > button:not([kind="secondary"]) {
+    background-color: #231f1f !important;
+    color: #ffffff !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+.stButton > button:not([kind="secondary"]):hover {
+    background-color: #2d2929 !important;
+    border: 1px solid #4a4a4a !important;
+}
+
+.stButton > button[kind="primary"] {
+    background-color: #231f1f !important;
+    color: #ffffff !important;
+    border: 1px solid #555555 !important;
+}
+
+.stButton > button[kind="primary"]:hover {
+    background-color: #2d2929 !important;
+    border: 1px solid #666666 !important;
+}
+
+/* Style info boxes (keywords) - these are the blue boxes */
+[data-testid="stNotification"] {
+    background-color: #231f1f !important;
+    border: 1px solid #3a3a3a !important;
+    color: #ffffff !important;
+}
+
+div[data-baseweb="notification"] {
+    background-color: #231f1f !important;
+    border: 1px solid #3a3a3a !important;
+    color: #ffffff !important;
+}
+
+/* Style st.info specifically */
+.stAlert[data-baseweb="notification"] {
+    background-color: #231f1f !important;
+    color: #ffffff !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+/* Force white text in info boxes */
+.stAlert[data-baseweb="notification"] p,
+.stAlert[data-baseweb="notification"] div,
+[data-testid="stNotification"] p,
+[data-testid="stNotification"] div {
+    color: #ffffff !important;
+}
+
+/* Style success messages */
+.stSuccess {
+    background-color: #1a3a1a !important;
+    color: #ffffff !important;
+}
+
+.stSuccess p, .stSuccess div {
+    color: #ffffff !important;
+}
+
+/* Style tabs */
+.stTabs [data-baseweb="tab-list"] {
+    background-color: #231f1f !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background-color: #231f1f !important;
+    color: #ffffff !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: #2d2929 !important;
+    border-bottom: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+</style>
+"""
+
+st.markdown(button_css, unsafe_allow_html=True)
+
 
 st.set_page_config(
     page_title="Research Planner Agent",

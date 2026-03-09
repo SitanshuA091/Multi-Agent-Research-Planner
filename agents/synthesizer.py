@@ -41,6 +41,14 @@ class SynthesizerAgent:
         
         return text
     
+    def _format_equations(self, text: str) -> str:
+        text = re.sub(r'\^(\d+)', r'<super>\1</super>', text)
+        text = re.sub(r'_(\d+)', r'<sub>\1</sub>', text)
+        text = re.sub(r'\^([a-zA-Z])', r'<super>\1</super>', text)
+        text = re.sub(r'_([a-zA-Z])', r'<sub>\1</sub>', text)
+        
+        return text
+    
     def _format_summaries_for_prompt(self, summaries: List[Dict]) -> str:
         formatted = []
         
@@ -161,7 +169,8 @@ class SynthesizerAgent:
                     heading = Paragraph(heading_text, heading_style)
                     story.append(heading)
                 else:
-                    para = Paragraph(para_text.strip(), body_style)
+                    formatted_para = self._format_equations(para_text.strip())
+                    para = Paragraph(formatted_para, body_style)
                     story.append(para)
         
         story.append(Spacer(1, 0.5*inch))

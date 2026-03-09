@@ -5,31 +5,39 @@ Topic: {topic}
 Summaries to Synthesize:
 {summaries}
 
-Instructions:
-- Create a comprehensive research report that integrates insights from all sources
-- Structure the report with clear sections: Introduction, Main Findings (organized by themes), Applications, Challenges, and Conclusion
-- Synthesize information across sources rather than summarizing each source separately
-- Identify common themes, contradictions, and gaps in the research
+REPORT STRUCTURE:
+Create a comprehensive research report with the following sections:
+- Introduction: Provide context and overview of the topic
+- Main Findings: Organize insights by themes, not by source
+- Applications: Discuss practical uses and implementations
+- Challenges: Identify limitations, contradictions, and research gaps
+- Conclusion: Synthesize key takeaways and future directions
+
+WRITING GUIDELINES:
 - Use formal academic writing style
 - Each section should have 2-4 well-developed paragraphs
-- Total report should be 600-800 words
-- Do not use bullet points - write in prose paragraphs only
-- Cite sources naturally within the text (e.g., "according to recent research on X...")
+- Total report should be 800-1200 words
+- Write in continuous prose - NO bullet points or lists
+- Cite sources naturally within text (e.g., "according to recent research on transformer architectures...")
+- Synthesize information across sources rather than summarizing each source separately
+- Identify common themes, contradictions, and gaps in the research
 
-IMPORTANT - Character Usage:
+MATHEMATICAL NOTATION:
+- Write equations using standard notation with ^ for superscripts and _ for subscripts
+- Examples: "E = mc^2", "H_2O", "Loss = -sum_i(y_i * log(p_i))", "attention(Q,K,V) = softmax(QK^T/sqrt(d_k))V"
+- Greek letters: write them out in full (alpha, beta, sigma, theta, gamma, etc.)
+- Fractions: use inline notation like "1/2" or "numerator/denominator"
+- Subscripts/superscripts: x^2, x^n, a_i, d_k, etc.
+
+CHARACTER AND FORMATTING RULES:
 - Use ONLY standard ASCII characters
 - Use regular hyphens (-) instead of em-dashes or en-dashes
-- Use regular quotes (") instead of smart quotes (" ")
-- Use regular apostrophes (') instead of curly apostrophes (' ')
-- Use three periods (...) instead of ellipsis (…)
-- Avoid any special Unicode symbols or characters
-- This ensures the PDF will render correctly without black boxes
-- Ignore any wikipedia images or arxiv images do not embed them from any external sources
-
-CRITICAL FORMATTING RULES:
-- DO NOT use asterisks for bold (**text**) or italics (*text*)
-- DO NOT use hashtags for headings (# Heading)
+- Use regular quotes (") instead of smart quotes
+- Use regular apostrophes (') instead of curly apostrophes
+- Use three periods (...) instead of ellipsis
+- DO NOT use asterisks for bold or italics
+- DO NOT use hashtags for headings
 - Write section headings as plain text at the start of paragraphs
-- Use simple, clean formatting for PDF conversion
+- Ignore any Wikipedia images or arXiv images - do not reference or embed external media
 
-Return the complete research report as continuous prose text.
+Return the complete research report as continuous prose text with proper mathematical notation where relevant.
