@@ -164,7 +164,12 @@ class SynthesizerAgent:
         
         for para_text in paragraphs:
             if para_text.strip():
-                if para_text.strip().isupper() or (len(para_text.strip()) < 100 and ':' not in para_text and para_text.strip().endswith(('Introduction', 'Conclusion', 'Findings', 'Applications', 'Challenges'))):
+                is_heading = (
+                para_text.strip() in ['Introduction', 'Main Findings', 'Applications', 'Challenges', 'Conclusion'] or
+                para_text.strip().isupper() or
+                (len(para_text.strip()) < 50 and ':' not in para_text))
+    
+                if is_heading:
                     heading_text = para_text.strip()
                     heading = Paragraph(heading_text, heading_style)
                     story.append(heading)

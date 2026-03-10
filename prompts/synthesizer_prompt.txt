@@ -6,12 +6,24 @@ Summaries to Synthesize:
 {summaries}
 
 REPORT STRUCTURE:
-Create a comprehensive research report with the following sections:
-- Introduction: Provide context and overview of the topic
-- Main Findings: Organize insights by themes, not by source
-- Applications: Discuss practical uses and implementations
-- Challenges: Identify limitations, contradictions, and research gaps
-- Conclusion: Synthesize key takeaways and future directions
+Create a comprehensive research report with clearly marked sections. Each section MUST start with its heading on a separate line:
+
+Introduction
+[1-2 paragraphs providing context and overview]
+
+Main Findings
+[1-3 paragraphs organized by themes, not by source]
+
+Applications
+[1-2 paragraphs on practical uses and implementations]
+
+Challenges
+[1-2 paragraphs on limitations, contradictions, and research gaps]
+
+Conclusion
+[1-2 paragraphs synthesizing key takeaways and future directions]
+
+CRITICAL: Write section headings (Introduction, Main Findings, Applications, Challenges, Conclusion) on their own lines, followed by blank lines, then the paragraph content.
 
 WRITING GUIDELINES:
 - Use formal academic writing style
