@@ -48,7 +48,6 @@ st.markdown(gradient_css, unsafe_allow_html=True)
 
 button_css = """
 <style>
-/* Style all buttons EXCEPT the Start button */
 .stButton > button:not([kind="secondary"]) {
     background-color: #231f1f !important;
     color: #ffffff !important;
@@ -71,7 +70,6 @@ button_css = """
     border: 1px solid #666666 !important;
 }
 
-/* Style info boxes (keywords) - these are the blue boxes */
 [data-testid="stNotification"] {
     background-color: #231f1f !important;
     border: 1px solid #3a3a3a !important;
@@ -84,14 +82,12 @@ div[data-baseweb="notification"] {
     color: #ffffff !important;
 }
 
-/* Style st.info specifically */
 .stAlert[data-baseweb="notification"] {
     background-color: #231f1f !important;
     color: #ffffff !important;
     border: 1px solid #3a3a3a !important;
 }
 
-/* Force white text in info boxes */
 .stAlert[data-baseweb="notification"] p,
 .stAlert[data-baseweb="notification"] div,
 [data-testid="stNotification"] p,
@@ -99,7 +95,6 @@ div[data-baseweb="notification"] {
     color: #ffffff !important;
 }
 
-/* Style success messages */
 .stSuccess {
     background-color: #1a3a1a !important;
     color: #ffffff !important;
@@ -109,7 +104,6 @@ div[data-baseweb="notification"] {
     color: #ffffff !important;
 }
 
-/* Style tabs */
 .stTabs [data-baseweb="tab-list"] {
     background-color: #231f1f !important;
 }
