@@ -348,31 +348,31 @@ Return ONLY a number between 0.0 and 1.0."""
         return results
 
 
-def main():
-    evaluator = ResearchAgentEvaluator()
-    
-    test_topics = [
-        "Vision Transformers",
-        "Recurrence Memory Transformer",
-        "Reinforcement Learning with Human Feedback"
-    ]
-    
-    dataset_name = "research-agent-eval-dataset"
-    
-    print(f"Creating dataset: {dataset_name}")
-    evaluator.create_dataset(dataset_name, test_topics)
-    
-    print("\nRunning full pipeline evaluation...")
-    results = evaluator.evaluate_full_pipeline(dataset_name)
-    
-    print(f"\n{'='*80}")
-    print("EVALUATION COMPLETE")
-    print(f"{'='*80}")
-    print(f"View results at: https://smith.langchain.com/")
-    print(f"Project: research-planner-agent")
-    print(f"Dataset: {dataset_name}")
-    print(f"{'='*80}\n")
-
-
-if __name__ == "__main__":
-    main()
+# def main():
+#     evaluator = ResearchAgentEvaluator()
+#
+#     test_topics = [
+#         "Vision Transformers",
+#         "Recurrence Memory Transformer",
+#         "Reinforcement Learning with Human Feedback"
+#     ]
+#
+#     dataset_name = "research-agent-eval-dataset"
+#
+#     print(f"Creating dataset: {dataset_name}")
+#     evaluator.create_dataset(dataset_name, test_topics)
+#
+#     print("\nRunning full pipeline evaluation...")
+#     results = evaluator.evaluate_full_pipeline(dataset_name)
+#
+#     print(f"\n{'='*80}")
+#     print("EVALUATION COMPLETE")
+#     print(f"{'='*80}")
+#     print(f"View results at: https://smith.langchain.com/")
+#     print(f"Project: research-planner-agent")
+#     print(f"Dataset: {dataset_name}")
+#     print(f"{'='*80}\n")
+#
+#
+# if __name__ == "__main__":
+#     main()

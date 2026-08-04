@@ -1,13 +1,35 @@
 import streamlit as st
 import json
 from pathlib import Path
+from types import SimpleNamespace
 from agents.planner import PlannerAgent
 from agents.retriever import RetrieverAgent
 from agents.summarizer import SummarizerAgent
 from agents.synthesizer import SynthesizerAgent
 from PIL import Image
+from langsmith.run_helpers import trace
+from evals import ResearchAgentEvaluator
 
 icon = Image.open("icon3.png")
+
+@st.cache_resource
+def get_evaluator():
+    return ResearchAgentEvaluator()
+
+evaluator = get_evaluator()
+
+def log_feedback(run_id, feedback_dict):
+    if run_id is None:
+        return
+    try:
+        evaluator.client.create_feedback(
+            run_id=run_id,
+            key=feedback_dict["key"],
+            score=feedback_dict["score"],
+            comment=feedback_dict.get("comment")
+        )
+    except Exception:
+        pass
 
 gradient_css = """
 <style>
@@ -163,11 +185,24 @@ elif st.session_state.stage == 'planning':
     if not st.session_state.keywords:
         with st.spinner("Planner Agent: Generating keywords..."):
             planner = PlannerAgent()
-            result = planner.generate_keywords(
-                st.session_state.topic, 
-                retry_count=st.session_state.retry_count
-            )
+            with trace(name="planner_stage", run_type="chain", inputs={"topic": st.session_state.topic}) as rt:
+                result = planner.generate_keywords(
+                    st.session_state.topic, 
+                    retry_count=st.session_state.retry_count
+                )
+                rt.end(outputs={"keywords": result['keywords']})
+                planner_run_id = rt.id
+            
             st.session_state.keywords = result['keywords']
+            
+            fake_example = SimpleNamespace(inputs={"topic": st.session_state.topic})
+            fake_run = SimpleNamespace(outputs={"keywords": result['keywords']})
+            
+            relevance_feedback = evaluator.keyword_relevance_evaluator(fake_run, fake_example)
+            specificity_feedback = evaluator.keyword_specificity_evaluator(fake_run, fake_example)
+            
+            log_feedback(planner_run_id, relevance_feedback)
+            log_feedback(planner_run_id, specificity_feedback)
     
     st.success("Keywords Generated")
     
@@ -268,25 +303,45 @@ elif st.session_state.stage == 'retrieving':
         total = len(st.session_state.keywords)
         
         results = []
-        for i, keyword in enumerate(st.session_state.keywords, 1):
-            status_text.markdown(f"**Retrieving sources for:** `{keyword}` **[{i}/{total}]**")
-            progress_bar.progress(i / total)
+        
+        with trace(name="retriever_stage", run_type="chain", inputs={"keywords": st.session_state.keywords}) as rt:
+            for i, keyword in enumerate(st.session_state.keywords, 1):
+                status_text.markdown(f"**Retrieving sources for:** `{keyword}` **[{i}/{total}]**")
+                progress_bar.progress(i / total)
+                
+                wiki_result = retriever._fetch_wikipedia(keyword)
+                import time
+                time.sleep(1)
+                arxiv_results = retriever._fetch_arxiv(keyword, max_results=1)
+                
+                results.append({
+                    "keyword": keyword,
+                    "wikipedia": wiki_result,
+                    "arxiv_papers": arxiv_results
+                })
+                time.sleep(1)
             
-            wiki_result = retriever._fetch_wikipedia(keyword)
-            import time
-            time.sleep(1)
-            arxiv_results = retriever._fetch_arxiv(keyword, max_results=1)
+            all_sources = []
+            for r in results:
+                if r['wikipedia']['title']:
+                    all_sources.append(r['wikipedia'])
+                all_sources.extend(r['arxiv_papers'])
             
-            results.append({
-                "keyword": keyword,
-                "wikipedia": wiki_result,
-                "arxiv_papers": arxiv_results
-            })
-            time.sleep(1)
+            rt.end(outputs={"sources": all_sources})
+            retriever_run_id = rt.id
         
         st.session_state.retrieval_results = results
         status_text.empty()
         progress_bar.empty()
+        
+        fake_example = SimpleNamespace(inputs={"keywords": st.session_state.keywords})
+        fake_run = SimpleNamespace(outputs={"sources": all_sources})
+        
+        quality_feedback = evaluator.source_quality_evaluator(fake_run, fake_example)
+        diversity_feedback = evaluator.source_diversity_evaluator(fake_run, fake_example)
+        
+        log_feedback(retriever_run_id, quality_feedback)
+        log_feedback(retriever_run_id, diversity_feedback)
     
     st.success("Retrieval Complete")
     
@@ -340,49 +395,70 @@ elif st.session_state.stage == 'summarizing':
         
         current = 0
         all_summaries = []
+        first_summary_for_eval = None
         
-        for doc in st.session_state.retrieval_results:
-            keyword = doc['keyword']
-            summaries_for_keyword = []
-            
-            status_text.markdown(f"**Processing keyword:** `{keyword}`")
-            
-            wiki = doc.get('wikipedia', {})
-            if wiki.get('title'):
-                current += 1
-                status_text.markdown(f"**[{current}/{total_sources}]** Summarizing Wikipedia: *{wiki['title'][:50]}...*")
-                progress_bar.progress(current / total_sources)
+        with trace(name="summarizer_stage", run_type="chain", inputs={"retrieval_results": "omitted_for_brevity"}) as rt:
+            for doc in st.session_state.retrieval_results:
+                keyword = doc['keyword']
+                summaries_for_keyword = []
                 
-                wiki_summary = summarizer._summarize_source(
-                    source_type="wikipedia",
-                    title=wiki['title'],
-                    content=wiki.get('content', ''),
-                    url=wiki.get('url', '')
-                )
-                summaries_for_keyword.append(wiki_summary)
-            
-            arxiv_papers = doc.get('arxiv_papers', [])
-            for paper in arxiv_papers:
-                current += 1
-                status_text.markdown(f"**[{current}/{total_sources}]** Summarizing arXiv: *{paper['title'][:50]}...*")
-                progress_bar.progress(current / total_sources)
+                status_text.markdown(f"**Processing keyword:** `{keyword}`")
                 
-                arxiv_summary = summarizer._summarize_source(
-                    source_type="arxiv",
-                    title=paper['title'],
-                    content=paper.get('abstract', ''),
-                    url=paper.get('url', '')
-                )
-                summaries_for_keyword.append(arxiv_summary)
+                wiki = doc.get('wikipedia', {})
+                if wiki.get('title'):
+                    current += 1
+                    status_text.markdown(f"**[{current}/{total_sources}]** Summarizing Wikipedia: *{wiki['title'][:50]}...*")
+                    progress_bar.progress(current / total_sources)
+                    
+                    wiki_summary = summarizer._summarize_source(
+                        source_type="wikipedia",
+                        title=wiki['title'],
+                        content=wiki.get('content', ''),
+                        url=wiki.get('url', '')
+                    )
+                    summaries_for_keyword.append(wiki_summary)
+                    if first_summary_for_eval is None:
+                        first_summary_for_eval = {
+                            "source_content": wiki.get('content', ''),
+                            "summary": ' '.join(wiki_summary.get('key_points', []))
+                        }
+                
+                arxiv_papers = doc.get('arxiv_papers', [])
+                for paper in arxiv_papers:
+                    current += 1
+                    status_text.markdown(f"**[{current}/{total_sources}]** Summarizing arXiv: *{paper['title'][:50]}...*")
+                    progress_bar.progress(current / total_sources)
+                    
+                    arxiv_summary = summarizer._summarize_source(
+                        source_type="arxiv",
+                        title=paper['title'],
+                        content=paper.get('abstract', ''),
+                        url=paper.get('url', '')
+                    )
+                    summaries_for_keyword.append(arxiv_summary)
+                    if first_summary_for_eval is None:
+                        first_summary_for_eval = {
+                            "source_content": paper.get('abstract', ''),
+                            "summary": ' '.join(arxiv_summary.get('key_points', []))
+                        }
+                
+                all_summaries.append({
+                    "keyword": keyword,
+                    "summaries": summaries_for_keyword
+                })
             
-            all_summaries.append({
-                "keyword": keyword,
-                "summaries": summaries_for_keyword
-            })
+            rt.end(outputs={"summaries": all_summaries})
+            summarizer_run_id = rt.id
         
         st.session_state.summaries = all_summaries
         status_text.empty()
         progress_bar.empty()
+        
+        if first_summary_for_eval:
+            fake_run = SimpleNamespace(outputs=first_summary_for_eval)
+            fake_example = SimpleNamespace(inputs={})
+            completeness_feedback = evaluator.summary_completeness_evaluator(fake_run, fake_example)
+            log_feedback(summarizer_run_id, completeness_feedback)
     
     total_summarized = sum(len(item['summaries']) for item in st.session_state.summaries)
     st.success(f"Summarization Complete - {total_summarized} sources summarized")
@@ -410,11 +486,26 @@ elif st.session_state.stage == 'synthesizing':
     if not st.session_state.synthesis:
         with st.spinner("Synthesizer Agent: Combining all summaries into final report..."):
             synthesizer = SynthesizerAgent()
-            synthesis = synthesizer.synthesize(
-                st.session_state.summaries,
-                st.session_state.topic
-            )
+            with trace(name="synthesizer_stage", run_type="chain", inputs={"topic": st.session_state.topic}) as rt:
+                synthesis = synthesizer.synthesize(
+                    st.session_state.summaries,
+                    st.session_state.topic
+                )
+                rt.end(outputs={"report_text": synthesis['report_text']})
+                synthesizer_run_id = rt.id
+            
             st.session_state.synthesis = synthesis
+            
+            fake_example = SimpleNamespace(inputs={"topic": st.session_state.topic})
+            fake_run = SimpleNamespace(outputs={"report_text": synthesis['report_text']})
+            
+            coherence_feedback = evaluator.synthesis_coherence_evaluator(fake_run, fake_example)
+            relevance_feedback = evaluator.synthesis_relevance_evaluator(fake_run, fake_example)
+            structure_feedback = evaluator.synthesis_structure_evaluator(fake_run, fake_example)
+            
+            log_feedback(synthesizer_run_id, coherence_feedback)
+            log_feedback(synthesizer_run_id, relevance_feedback)
+            log_feedback(synthesizer_run_id, structure_feedback)
     
     st.success(f"Synthesis Complete ({len(st.session_state.synthesis['report_text'])} characters)")
     
