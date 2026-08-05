@@ -24,7 +24,7 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
   - User review and approval
   - Single retry with feedback for more specific terms
   - Manual keyword replacement option
-- **Model:** Groq Llama 3.3 70B Versatile
+- **Model:**(Gemini API) Gemini-3.5-flash
 
 **2. Retriever Agent**
 - **Purpose:** Fetches relevant documents from Wikipedia and arXiv
@@ -42,7 +42,7 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
   - Separate prompts for Wikipedia articles vs research papers
   - Preserves technical terminology and key findings
   - Batch processing of all sources with strict summarization only
-- **Model:** Google Gemini 2.5 Flash Experimental
+- **Model:**(Groq API) Llama-3.3-70b-versatile
 
 **4. Synthesizer Agent**
 - **Purpose:** Combines all summaries into a cohesive research report
@@ -60,11 +60,11 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 
 | Agent | Model | Provider | Purpose |
 |-------|-------|----------|---------|
-| Planner | llama-3.3-70b-versatile | Groq | Keyword generation |
-| Summarizer | gemini-3.0-pro=preview | Google | Source summarization |
+| Planner | gemini-3.0-flash | Google | Keyword generation |
+| Summarizer | llama-3.3-70b-versatile | Groq | Source summarization |
 | Synthesizer | GPT-OSS(120b) | Groq | Report synthesis |
 
-<em>the model and provider choice is done so that I can avoid hitting the groq api more than the restricted RPM and space out those 2 API calls ince we are ung tthe free tiers</em>
+<em>the model and provider choice is done so because gemini 3.5 flash amongst available free tiers has latest pretrained data on newer technological advances, and also to space out calls between api providers to avoid hitting RPM and limit token usage based on limits. </em>
 
 ### Frameworks & Libraries
 
