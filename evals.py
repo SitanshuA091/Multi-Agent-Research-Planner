@@ -69,12 +69,16 @@ class ResearchAgentEvaluator:
         keywords = run.outputs.get("keywords", [])
         
         prompt = f"""Rate how relevant these keywords are to the topic on a scale of 0.0 to 1.0.
-
 Topic: {topic}
 Keywords: {', '.join(keywords)}
-
 Consider relevance, specificity, and coverage of the topic.
-Return ONLY a number between 0.0 and 1.0."""
+Return ONLY a number between 0.0 and 1.0.
+0.9-1.0 = Perfect, highly specific, technical terms only
+0.7-0.8 = Good but 1 keyword is slightly generic
+0.5-0.6 = Mixed - some good, some too broad
+0.3-0.4 = Mostly generic or loosely related
+0.0-0.2 = Off-topic or unusable
+"""
         
         score = self._score_with_llm(prompt)
         
