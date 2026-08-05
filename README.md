@@ -64,7 +64,7 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 | Summarizer | llama-3.3-70b-versatile | Groq | Source summarization |
 | Synthesizer | GPT-OSS(120b) | Groq | Report synthesis |
 
-<em>the model and provider choice is done so because gemini 3.5 flash amongst available free tiers has latest pretrained data on newer technological advances, and also to space out calls between api providers to avoid hitting RPM and limit token usage based on limits. </em>
+<em>the model and provider choice is done so because gemini 3.5 flash amongst available free tiers has latest pretrained data on newer technological advances which improves keyword specificity across all topics, and also to space out calls between api providers to avoid hitting RPM and limit token usage based on limits. </em>
 
 ### Frameworks & Libraries
 
