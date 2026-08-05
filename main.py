@@ -12,6 +12,16 @@ from evals import ResearchAgentEvaluator
 
 icon = Image.open("icon3.png")
 
+#hide_header_css = """
+#<style>
+#[data-testid="stHeader"] {
+#    display: none;
+#}
+#</style>
+#"""
+
+#st.markdown(hide_header_css, unsafe_allow_html=True)
+
 @st.cache_resource
 def get_evaluator():
     return ResearchAgentEvaluator()
@@ -36,7 +46,7 @@ gradient_css = """
 [data-testid="stAppViewContainer"] {
     background: radial-gradient(
         circle at top,
-        #373748,
+        #373890,
         #2a2a2b,
         #1e1e1d
     );
@@ -119,6 +129,14 @@ div[data-baseweb="notification"] {
     border-bottom: 2px solid #ffffff !important;
     color: #ffffff !important;
 }
+
+.stProgress > div > div > div > div {
+    background-color: #1e1e1d !important;
+}
+
+.stProgress > div > div > div {
+    background-color: #3a3a3a !important;
+}
 </style>
 """
 
@@ -141,6 +159,7 @@ st.logo(LOGO_URL, size="large")
 
 st.title("**Multi-Agent Research Planner**", text_alignment="center")
 st.markdown("Generate comprehensive research reports using AI agents", text_alignment="center")
+
 
 if 'stage' not in st.session_state:
     st.session_state.stage = 'input'
@@ -577,7 +596,7 @@ st.sidebar.markdown("### About")
 st.sidebar.markdown("Multi-agent system for automated research report generation")
 st.sidebar.markdown("")
 st.sidebar.markdown("**Agents:**")
-st.sidebar.markdown("- **Planner** - Llama 3.3")
+st.sidebar.markdown("- **Planner** - Gemini 3.5 Flash ")
 st.sidebar.markdown("- **Retriever** - Wiki + arXiv")
-st.sidebar.markdown("- **Summarizer** - Gemini 2.5 Flash")
+st.sidebar.markdown("- **Summarizer** - Llama 3.1B")
 st.sidebar.markdown("- **Synthesizer** - GPT-Oss(120b)")
