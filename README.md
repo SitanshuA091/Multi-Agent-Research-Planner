@@ -1,4 +1,5 @@
-# 📚 Multi-Agent Research Planner
+# 📚 **Multi-Agent Research Planner**
+<img width="1003" height="246" alt="image" align = "centre" src="https://github.com/user-attachments/assets/65b31cf1-fcda-4a38-b6f4-a7e537cd3fab" />
 
 A modular research automation system that uses LangGraph and multiple AI agents to generate comprehensive research reports from academic sources.
 
