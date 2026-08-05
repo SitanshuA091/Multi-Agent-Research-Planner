@@ -2,7 +2,8 @@ import os
 from typing import List, Dict
 from pathlib import Path
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+# from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from pydantic import BaseModel, Field
 
 load_dotenv()
@@ -16,11 +17,11 @@ class Summary(BaseModel):
 
 class SummarizerAgent:
     
-    def __init__(self, model_name: str = "gemini-2.5-flash"):
-        self.llm = ChatGoogleGenerativeAI(
+    def __init__(self, model_name: str = "llama-3.3-70b-versatile"):
+        self.llm = ChatGroq(
             model=model_name,
             temperature=0.3, 
-            google_api_key=os.getenv("GOOGLE_API_KEY")
+            groq_api_key=os.getenv("GROQ_API_KEY")
         )
         self.prompts = self._load_prompts()
     

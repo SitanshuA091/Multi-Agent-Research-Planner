@@ -2,7 +2,8 @@ import os
 from pathlib import Path
 from typing import List, TypedDict, Literal, Optional, Callable
 from pydantic import BaseModel, Field
-from langchain_groq import ChatGroq
+# from langchain_groq import ChatGroq
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from langgraph.graph import StateGraph, END
@@ -27,11 +28,11 @@ class PlannerState(TypedDict):
 
 class PlannerAgent:
     
-    def __init__(self, model_name: str = "llama-3.3-70b-versatile"):
-        self.llm = ChatGroq(
+    def __init__(self, model_name: str = "gemini-3.5-flash"):
+        self.llm = ChatGoogleGenerativeAI(
             model=model_name,
             temperature=0.3,
-            api_key=os.getenv("GROQ_API_KEY")
+            api_key=os.getenv("GOOGLE_API_KEY")
         )
         self.parser = JsonOutputParser(pydantic_object=ResearchPlan)
         self.prompt_template = self._load_prompt()
