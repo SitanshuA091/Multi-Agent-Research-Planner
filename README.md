@@ -60,7 +60,7 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 
 | Agent | Model | Provider | Purpose |
 |-------|-------|----------|---------|
-| Planner | gemini-3.0-flash | Google | Keyword generation |
+| Planner | gemini-3.5-flash | Google | Keyword generation |
 | Summarizer | llama-3.3-70b-versatile | Groq | Source summarization |
 | Synthesizer | GPT-OSS(120b) | Groq | Report synthesis |
 
