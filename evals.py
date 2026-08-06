@@ -18,7 +18,7 @@ from agents.synthesizer import SynthesizerAgent
 load_dotenv()
 
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_PROJECT"] = "research-planner-agent"
+os.environ["LANGSMITH_PROJECT"] = "research-planner-agent"
 
 
 class ResearchAgentEvaluator:
@@ -63,22 +63,18 @@ class ResearchAgentEvaluator:
             return max(0.0, min(1.0, score))
         except:
             return 0.5
-    
+        
     def keyword_relevance_evaluator(self, run: Run, example: Example) -> Dict:
         topic = example.inputs.get("topic", "")
         keywords = run.outputs.get("keywords", [])
         
         prompt = f"""Rate how relevant these keywords are to the topic on a scale of 0.0 to 1.0.
+ 
 Topic: {topic}
 Keywords: {', '.join(keywords)}
+ 
 Consider relevance, specificity, and coverage of the topic.
-Return ONLY a number between 0.0 and 1.0.
-0.9-1.0 = Perfect, highly specific, technical terms only
-0.7-0.8 = Good but 1 keyword is slightly generic
-0.5-0.6 = Mixed - some good, some too broad
-0.3-0.4 = Mostly generic or loosely related
-0.0-0.2 = Off-topic or unusable
-"""
+Return ONLY a number between 0.0 and 1.0."""
         
         score = self._score_with_llm(prompt)
         
@@ -87,6 +83,7 @@ Return ONLY a number between 0.0 and 1.0.
             "score": score,
             "comment": f"Keywords: {keywords}"
         }
+    
     
     def keyword_specificity_evaluator(self, run: Run, example: Example) -> Dict:
         keywords = run.outputs.get("keywords", [])

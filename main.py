@@ -12,16 +12,7 @@ from evals import ResearchAgentEvaluator
 
 icon = Image.open("icon3.png")
 
-#hide_header_css = """
-#<style>
-#[data-testid="stHeader"] {
-#    display: none;
-#}
-#</style>
-#"""
-
-#st.markdown(hide_header_css, unsafe_allow_html=True)
-
+import os
 @st.cache_resource
 def get_evaluator():
     return ResearchAgentEvaluator()
