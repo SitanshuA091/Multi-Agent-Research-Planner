@@ -26,7 +26,7 @@ class ResearchAgentEvaluator:
     def __init__(self):
         self.client = Client()
         self.judge_llm = ChatGroq(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             temperature=0.1,
             api_key=os.getenv("GROQ_API_KEY")
         )

@@ -16,7 +16,7 @@ load_dotenv()
 
 class SynthesizerAgent:
     
-    def __init__(self, model_name: str = "openai/gpt-oss-120b"):
+    def __init__(self, model_name: str = "openai/gpt-oss-20b"):
         self.llm = ChatGroq(
             model=model_name,
             temperature=0.4,
