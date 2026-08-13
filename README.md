@@ -73,6 +73,7 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 - **LangChain:** LLM integration and prompt management
 - **ReportLab:** Professional PDF generation
 - **Requests:** API calls to Wikipedia and arXiv
+- **Langsmith:** Runs Traces and Evaluation scores for each agent
 - **Python 3.10+**
 
 ### External APIs
