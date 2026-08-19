@@ -10,7 +10,6 @@ load_dotenv()
 
 class RetrieverAgent:
     def __init__(self):
-        """Initialize retriever with API endpoints"""
         self.wiki_search_url = "https://en.wikipedia.org/w/rest.php/v1/search/page"
         self.wiki_summary_url = "https://en.wikipedia.org/api/rest_v1/page/summary"
         self.arxiv_api_url = "http://export.arxiv.org/api/query"

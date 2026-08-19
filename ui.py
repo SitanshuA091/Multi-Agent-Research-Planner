@@ -1,36 +1,14 @@
+"""script that keeps streamlit frontend independent with dedicated fastapi backend"""
 import streamlit as st
 import json
+import time
+import requests
 from pathlib import Path
-from types import SimpleNamespace
-from agents.planner import PlannerAgent
-from agents.retriever import RetrieverAgent
-from agents.summarizer import SummarizerAgent
-from agents.synthesizer import SynthesizerAgent
 from PIL import Image
-from langsmith.run_helpers import trace
-from backend.evals import ResearchAgentEvaluator
 
-icon = Image.open("assets/icon3.png")
+icon = Image.open("assets\icon3.png")
 
-import os
-@st.cache_resource
-def get_evaluator():
-    return ResearchAgentEvaluator()
-
-evaluator = get_evaluator()
-
-def log_feedback(run_id, feedback_dict):
-    if run_id is None:
-        return
-    try:
-        evaluator.client.create_feedback(
-            run_id=run_id,
-            key=feedback_dict["key"],
-            score=feedback_dict["score"],
-            comment=feedback_dict.get("comment")
-        )
-    except Exception:
-        pass
+API_URL = "http://localhost:8000"
 
 gradient_css = """
 <style>
@@ -152,8 +130,84 @@ st.title("**Multi-Agent Research Planner**", text_alignment="center")
 st.markdown("Generate comprehensive research reports using AI agents", text_alignment="center")
 
 
+def api_post(path, json_body=None):
+    try:
+        response = requests.post(f"{API_URL}{path}", json=json_body)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        st.error(f"API request failed: {e}")
+        return None
+
+
+def api_get(path):
+    try:
+        response = requests.get(f"{API_URL}{path}")
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        st.error(f"API request failed: {e}")
+        return None
+
+
+def poll_until_stage_past(job_id, blocking_stage, status_label):
+    status_text = st.empty()
+    progress_bar = st.progress(0)
+    progress_value = 0
+    while True:
+        status = api_get(f"/jobs/{job_id}/status")
+        if status is None:
+            progress_bar.empty()
+            return None
+        if status["stage"] == "failed":
+            progress_bar.empty()
+            st.error(f"Pipeline failed: {status.get('error', 'Unknown error')}")
+            return None
+        if status["stage"] != blocking_stage:
+            progress_bar.progress(100)
+            time.sleep(0.3)
+            status_text.empty()
+            progress_bar.empty()
+            return status
+        status_text.markdown(f"**{status_label}**")
+        progress_value = min(progress_value + 5, 95)
+        progress_bar.progress(progress_value)
+        time.sleep(2)
+
+
+import threading
+
+def api_post_with_progress(path, json_body, status_label):
+    status_text = st.empty()
+    progress_bar = st.progress(0)
+    
+    result_container = {}
+    
+    def worker():
+        result_container["result"] = api_post(path, json_body)
+    
+    thread = threading.Thread(target=worker)
+    thread.start()
+    
+    progress_value = 0
+    status_text.markdown(f"**{status_label}**")
+    while thread.is_alive():
+        progress_value = min(progress_value + 5, 95)
+        progress_bar.progress(progress_value)
+        time.sleep(0.3)
+    
+    thread.join()
+    progress_bar.progress(100)
+    time.sleep(0.2)
+    status_text.empty()
+    progress_bar.empty()
+    
+    return result_container.get("result")
+
+
 if 'stage' not in st.session_state:
     st.session_state.stage = 'input'
+    st.session_state.job_id = None
     st.session_state.topic = ''
     st.session_state.keywords = []
     st.session_state.retry_count = 0
@@ -163,6 +217,7 @@ if 'stage' not in st.session_state:
 
 def reset_pipeline():
     st.session_state.stage = 'input'
+    st.session_state.job_id = None
     st.session_state.topic = ''
     st.session_state.keywords = []
     st.session_state.retry_count = 0
@@ -177,36 +232,19 @@ if st.session_state.stage == 'input':
     col1, col2 = st.columns([1, 5])
     with col1:
         if st.button("Start", type="secondary", disabled=not topic):
-            st.session_state.topic = topic
-            st.session_state.stage = 'planning'
-            st.rerun()
+            result = api_post_with_progress("/submit", {"topic": topic}, "Planner Agent: Generating keywords...")
+            if result:
+                st.session_state.job_id = result["job_id"]
+                st.session_state.topic = topic
+                st.session_state.keywords = result["keywords"]
+                st.session_state.retry_count = result["retry_count"]
+                st.session_state.stage = 'planning'
+                st.rerun()
 
 elif st.session_state.stage == 'planning':
     st.markdown("---")
     st.markdown(f"### Topic: {st.session_state.topic}")
     st.markdown("---")
-    
-    if not st.session_state.keywords:
-        with st.spinner("Planner Agent: Generating keywords..."):
-            planner = PlannerAgent()
-            with trace(name="planner_stage", run_type="chain", inputs={"topic": st.session_state.topic}) as rt:
-                result = planner.generate_keywords(
-                    st.session_state.topic, 
-                    retry_count=st.session_state.retry_count
-                )
-                rt.end(outputs={"keywords": result['keywords']})
-                planner_run_id = rt.id
-            
-            st.session_state.keywords = result['keywords']
-            
-            fake_example = SimpleNamespace(inputs={"topic": st.session_state.topic})
-            fake_run = SimpleNamespace(outputs={"keywords": result['keywords']})
-            
-            relevance_feedback = evaluator.keyword_relevance_evaluator(fake_run, fake_example)
-            specificity_feedback = evaluator.keyword_specificity_evaluator(fake_run, fake_example)
-            
-            log_feedback(planner_run_id, relevance_feedback)
-            log_feedback(planner_run_id, specificity_feedback)
     
     st.success("Keywords Generated")
     
@@ -225,13 +263,19 @@ elif st.session_state.stage == 'planning':
     col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("Accept Keywords", type="primary", use_container_width=True):
-            st.session_state.stage = 'retrieving'
-            st.rerun()
+            result = api_post(f"/jobs/{st.session_state.job_id}/accept")
+            if result:
+                st.session_state.stage = 'retrieving'
+                st.rerun()
     with col2:
         if st.button("Retry (More Specific)", use_container_width=True, disabled=st.session_state.retry_count >= 1):
-            st.session_state.retry_count += 1
-            st.session_state.keywords = []
-            st.rerun()
+            result = api_post_with_progress(
+                f"/jobs/{st.session_state.job_id}/retry", None, "Regenerating keywords..."
+            )
+            if result:
+                st.session_state.keywords = result["keywords"]
+                st.session_state.retry_count = result["retry_count"]
+                st.rerun()
     with col3:
         if st.button("Manual Edit", use_container_width=True):
             st.session_state.stage = 'manual_edit'
@@ -268,15 +312,14 @@ elif st.session_state.stage == 'manual_edit':
     col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("Replace Keyword", type="primary", use_container_width=True, disabled=not new_keyword):
-            planner = PlannerAgent()
-            updated_keywords = planner.replace_keyword(
-                st.session_state.keywords.copy(), 
-                keyword_index, 
-                new_keyword
+            result = api_post(
+                f"/jobs/{st.session_state.job_id}/manual-edit",
+                {"index": keyword_index, "new_keyword": new_keyword}
             )
-            st.session_state.keywords = updated_keywords
-            st.success(f"Replaced keyword {keyword_index+1}")
-            st.rerun()
+            if result:
+                st.session_state.keywords = result["keywords"]
+                st.success(f"Replaced keyword {keyword_index+1}")
+                st.rerun()
     with col2:
         if st.button("Review Keywords", use_container_width=True):
             st.session_state.stage = 'planning'
@@ -300,52 +343,15 @@ elif st.session_state.stage == 'retrieving':
     st.markdown("---")
     
     if not st.session_state.retrieval_results:
-        progress_bar = st.progress(0)
-        status_text = st.empty()
+        with st.spinner("Retrieving sources..."):
+            status = poll_until_stage_past(st.session_state.job_id, "retrieving", "Retrieving sources for your keywords...")
         
-        retriever = RetrieverAgent()
-        total = len(st.session_state.keywords)
+        if status is None:
+            st.stop()
         
-        results = []
-        
-        with trace(name="retriever_stage", run_type="chain", inputs={"keywords": st.session_state.keywords}) as rt:
-            for i, keyword in enumerate(st.session_state.keywords, 1):
-                status_text.markdown(f"**Retrieving sources for:** `{keyword}` **[{i}/{total}]**")
-                progress_bar.progress(i / total)
-                
-                wiki_result = retriever._fetch_wikipedia(keyword)
-                import time
-                time.sleep(1)
-                arxiv_results = retriever._fetch_arxiv(keyword, max_results=1)
-                
-                results.append({
-                    "keyword": keyword,
-                    "wikipedia": wiki_result,
-                    "arxiv_papers": arxiv_results
-                })
-                time.sleep(1)
-            
-            all_sources = []
-            for r in results:
-                if r['wikipedia']['title']:
-                    all_sources.append(r['wikipedia'])
-                all_sources.extend(r['arxiv_papers'])
-            
-            rt.end(outputs={"sources": all_sources})
-            retriever_run_id = rt.id
-        
-        st.session_state.retrieval_results = results
-        status_text.empty()
-        progress_bar.empty()
-        
-        fake_example = SimpleNamespace(inputs={"keywords": st.session_state.keywords})
-        fake_run = SimpleNamespace(outputs={"sources": all_sources})
-        
-        quality_feedback = evaluator.source_quality_evaluator(fake_run, fake_example)
-        diversity_feedback = evaluator.source_diversity_evaluator(fake_run, fake_example)
-        
-        log_feedback(retriever_run_id, quality_feedback)
-        log_feedback(retriever_run_id, diversity_feedback)
+        sources_data = api_get(f"/jobs/{st.session_state.job_id}/sources")
+        if sources_data:
+            st.session_state.retrieval_results = sources_data["retrieval_results"]
     
     st.success("Retrieval Complete")
     
@@ -387,82 +393,15 @@ elif st.session_state.stage == 'summarizing':
     st.markdown("---")
     
     if not st.session_state.summaries:
-        progress_bar = st.progress(0)
-        status_text = st.empty()
+        with st.spinner("Summarizing sources..."):
+            status = poll_until_stage_past(st.session_state.job_id, "summarizing", "Summarizing retrieved sources...")
         
-        summarizer = SummarizerAgent()
+        if status is None:
+            st.stop()
         
-        total_sources = sum(
-            1 + len(doc.get('arxiv_papers', []))
-            for doc in st.session_state.retrieval_results
-        )
-        
-        current = 0
-        all_summaries = []
-        first_summary_for_eval = None
-        
-        with trace(name="summarizer_stage", run_type="chain", inputs={"retrieval_results": "omitted_for_brevity"}) as rt:
-            for doc in st.session_state.retrieval_results:
-                keyword = doc['keyword']
-                summaries_for_keyword = []
-                
-                status_text.markdown(f"**Processing keyword:** `{keyword}`")
-                
-                wiki = doc.get('wikipedia', {})
-                if wiki.get('title'):
-                    current += 1
-                    status_text.markdown(f"**[{current}/{total_sources}]** Summarizing Wikipedia: *{wiki['title'][:50]}...*")
-                    progress_bar.progress(current / total_sources)
-                    
-                    wiki_summary = summarizer._summarize_source(
-                        source_type="wikipedia",
-                        title=wiki['title'],
-                        content=wiki.get('content', ''),
-                        url=wiki.get('url', '')
-                    )
-                    summaries_for_keyword.append(wiki_summary)
-                    if first_summary_for_eval is None:
-                        first_summary_for_eval = {
-                            "source_content": wiki.get('content', ''),
-                            "summary": ' '.join(wiki_summary.get('key_points', []))
-                        }
-                
-                arxiv_papers = doc.get('arxiv_papers', [])
-                for paper in arxiv_papers:
-                    current += 1
-                    status_text.markdown(f"**[{current}/{total_sources}]** Summarizing arXiv: *{paper['title'][:50]}...*")
-                    progress_bar.progress(current / total_sources)
-                    
-                    arxiv_summary = summarizer._summarize_source(
-                        source_type="arxiv",
-                        title=paper['title'],
-                        content=paper.get('abstract', ''),
-                        url=paper.get('url', '')
-                    )
-                    summaries_for_keyword.append(arxiv_summary)
-                    if first_summary_for_eval is None:
-                        first_summary_for_eval = {
-                            "source_content": paper.get('abstract', ''),
-                            "summary": ' '.join(arxiv_summary.get('key_points', []))
-                        }
-                
-                all_summaries.append({
-                    "keyword": keyword,
-                    "summaries": summaries_for_keyword
-                })
-            
-            rt.end(outputs={"summaries": all_summaries})
-            summarizer_run_id = rt.id
-        
-        st.session_state.summaries = all_summaries
-        status_text.empty()
-        progress_bar.empty()
-        
-        if first_summary_for_eval:
-            fake_run = SimpleNamespace(outputs=first_summary_for_eval)
-            fake_example = SimpleNamespace(inputs={})
-            completeness_feedback = evaluator.summary_completeness_evaluator(fake_run, fake_example)
-            log_feedback(summarizer_run_id, completeness_feedback)
+        summaries_data = api_get(f"/jobs/{st.session_state.job_id}/summaries")
+        if summaries_data:
+            st.session_state.summaries = summaries_data["summaries"]
     
     total_summarized = sum(len(item['summaries']) for item in st.session_state.summaries)
     st.success(f"Summarization Complete - {total_summarized} sources summarized")
@@ -489,27 +428,18 @@ elif st.session_state.stage == 'synthesizing':
     
     if not st.session_state.synthesis:
         with st.spinner("Synthesizer Agent: Combining all summaries into final report..."):
-            synthesizer = SynthesizerAgent()
-            with trace(name="synthesizer_stage", run_type="chain", inputs={"topic": st.session_state.topic}) as rt:
-                synthesis = synthesizer.synthesize(
-                    st.session_state.summaries,
-                    st.session_state.topic
-                )
-                rt.end(outputs={"report_text": synthesis['report_text']})
-                synthesizer_run_id = rt.id
-            
-            st.session_state.synthesis = synthesis
-            
-            fake_example = SimpleNamespace(inputs={"topic": st.session_state.topic})
-            fake_run = SimpleNamespace(outputs={"report_text": synthesis['report_text']})
-            
-            coherence_feedback = evaluator.synthesis_coherence_evaluator(fake_run, fake_example)
-            relevance_feedback = evaluator.synthesis_relevance_evaluator(fake_run, fake_example)
-            structure_feedback = evaluator.synthesis_structure_evaluator(fake_run, fake_example)
-            
-            log_feedback(synthesizer_run_id, coherence_feedback)
-            log_feedback(synthesizer_run_id, relevance_feedback)
-            log_feedback(synthesizer_run_id, structure_feedback)
+            status = poll_until_stage_past(st.session_state.job_id, "synthesizing", "Synthesizing final report...")
+        
+        if status is None:
+            st.stop()
+        
+        result_data = api_get(f"/jobs/{st.session_state.job_id}/result")
+        if result_data:
+            st.session_state.synthesis = {
+                "topic": result_data["topic"],
+                "report_text": result_data["report_text"],
+                "generated_at": result_data["generated_at"]
+            }
     
     st.success(f"Synthesis Complete ({len(st.session_state.synthesis['report_text'])} characters)")
     
@@ -526,28 +456,25 @@ elif st.session_state.stage == 'synthesizing':
     with col1:
         if st.button("Generate PDF Report", type="primary", use_container_width=True):
             with st.spinner("Generating PDF..."):
-                output_dir = Path("outputs")
-                output_dir.mkdir(exist_ok=True)
-                
-                safe_filename = "".join(c for c in st.session_state.topic if c.isalnum() or c in (' ', '-', '_')).strip()
-                safe_filename = safe_filename.replace(' ', '_')[:50]
-                pdf_path = output_dir / f"{safe_filename}_report.pdf"
-                
-                synthesizer = SynthesizerAgent()
-                synthesizer.generate_pdf(st.session_state.synthesis, str(pdf_path))
-                
-                with open(pdf_path, 'rb') as pdf_file:
-                    pdf_bytes = pdf_file.read()
-                
-                st.download_button(
-                    label="Download PDF Report",
-                    data=pdf_bytes,
-                    file_name=f"{safe_filename}_report.pdf",
-                    mime="application/pdf",
-                    use_container_width=True
-                )
-                
-                st.success("PDF Generated Successfully!")
+                try:
+                    response = requests.get(f"{API_URL}/jobs/{st.session_state.job_id}/pdf")
+                    response.raise_for_status()
+                    pdf_bytes = response.content
+                    
+                    safe_filename = "".join(c for c in st.session_state.topic if c.isalnum() or c in (' ', '-', '_')).strip()
+                    safe_filename = safe_filename.replace(' ', '_')[:50]
+                    
+                    st.download_button(
+                        label="Download PDF Report",
+                        data=pdf_bytes,
+                        file_name=f"{safe_filename}_report.pdf",
+                        mime="application/pdf",
+                        use_container_width=True
+                    )
+                    
+                    st.success("PDF Generated Successfully!")
+                except requests.exceptions.RequestException as e:
+                    st.error(f"PDF generation failed: {e}")
     
     with col2:
         synthesis_json = json.dumps(st.session_state.synthesis, indent=2)

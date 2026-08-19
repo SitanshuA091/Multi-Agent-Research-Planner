@@ -17,7 +17,7 @@ class Summary(BaseModel):
 
 class SummarizerAgent:
     
-    def __init__(self, model_name: str = "llama-3.3-70b-versatile"):
+    def __init__(self, model_name: str = "openai/gpt-oss-120b"):
         self.llm = ChatGroq(
             model=model_name,
             temperature=0.3, 
