@@ -84,6 +84,7 @@ User Topic → Planner → Retriever → Summarizer → Synthesizer → PDF Repo
 
 ## Future Enhancements
 
+- Deploy streamlit/react frontend (`ui.py`) with the dedicated fastapi backend via render and streamlit/vercel.
 - Additional source APIs (PubMed, Semantic Scholar)
 - Citation management and bibliography generation
 - Synthesizer feedback loop for completeness checks
