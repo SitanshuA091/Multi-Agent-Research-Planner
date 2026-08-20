@@ -10,7 +10,7 @@ from PIL import Image
 from langsmith.run_helpers import trace
 from backend.evals import ResearchAgentEvaluator
 
-icon = Image.open("assets/icon3.png")
+icon = Image.open("assets/ev52sgev52sgev52.png")
 
 import os
 @st.cache_resource
