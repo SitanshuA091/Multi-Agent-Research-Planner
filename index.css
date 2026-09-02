@@ -1,0 +1,333 @@
+[data-testid="stAppViewContainer"],
+.stAppViewContainer {
+    background: radial-gradient(
+        circle at top,
+        #e0e7ff,
+        #f3f4f6,
+        #ffffff
+    ) !important;
+}
+
+/* Header Toolbar (Top Bar) */
+[data-testid="stHeader"] {
+    background-color: rgba(255, 255, 255, 0) !important;
+}
+
+/* Main Text & Title Styling */
+h1, h2, h3, h4, h5, h6, .stMarkdown p, [data-testid="stTitle"] {
+    color: #111827 !important;
+}
+
+/* Horizontal Dividers (st.markdown("---")) */
+hr {
+    border-color: #e5e7eb !important;
+    background-color: #e5e7eb !important;
+}
+
+/* Text Input & Keywords Input Field */
+div[data-baseweb="input"] {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+}
+
+div[data-baseweb="input"] input,
+.stTextInput input,
+input[type="text"] {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    caret-color: #111827 !important;
+}
+
+div[data-baseweb="input"] input::placeholder,
+.stTextInput input::placeholder {
+    color: #6b7280 !important;
+}
+
+/* Buttons */
+.stButton > button:not([kind="secondary"]) {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
+}
+.stButton > button:not([kind="secondary"]):hover {
+    background-color: #f3f4f6 !important;
+    border: 1px solid #9ca3af !important;
+}
+.stButton > button[kind="primary"] {
+    background-color: #373890 !important;
+    color: #ffffff !important;
+    border: 1px solid #373890 !important;
+}
+.stButton > button[kind="primary"]:hover {
+    background-color: #2a2a70 !important;
+    border: 1px solid #2a2a70 !important;
+}
+
+/* Progress Bar */
+.stProgress > div > div > div > div {
+    background-color: #373890 !important;
+}
+.stProgress > div > div > div {
+    background-color: #e5e7eb !important;
+}
+
+/* Info Cards / Alerts */
+[data-testid="stNotification"],
+div[data-baseweb="notification"],
+.stAlert[data-baseweb="notification"] {
+    background-color: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #111827 !important;
+}
+
+/* Spinner (e.g. "Summarizer Agent: Summarizing...") */
+[data-testid="stSpinner"] {
+    color: #111827 !important;
+}
+[data-testid="stSpinner"] > div {
+    color: #111827 !important;
+}
+[data-testid="stSpinner"] svg {
+    stroke: #111827 !important;
+}
+[data-testid="stSpinner"] p {
+    color: #111827 !important;
+}
+
+/* Status text (e.g. "Retrieving sources...", "Synthesizing report...") */
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] strong {
+    color: #111827 !important;
+}
+
+/* Expander (Summary Preview) header and body text */
+.stExpander,
+.stExpander summary,
+.stExpander p,
+.stExpander div,
+.stExpander span,
+[data-testid="stExpanderDetails"] p,
+[data-testid="stExpanderDetails"] div {
+    color: #111827 !important;
+}
+.stExpander {
+    background-color: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+/* Inline code / backtick text (e.g. `keyword` in status lines) */
+code {
+    color: #111827 !important;
+    background-color: #f3f4f6 !important;
+}
+
+/* Caption text */
+[data-testid="stCaptionContainer"] {
+    color: #6b7280 !important;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background-color: #f9fafb !important;
+    border-right: 1px solid #e5e7eb !important;
+}
+[data-testid="stSidebar"] * {
+    color: #111827 !important;
+}
+
+/* Text Area (Report Preview) */
+.stTextArea textarea,
+textarea,
+textarea:disabled,
+.stTextArea textarea:disabled {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    opacity: 1 !important;
+    border: 1px solid #d1d5db !important;
+}
+.stTextArea label,
+.stTextArea label p {
+    color: #111827 !important;
+}
+
+/* Select box (Manual Edit dropdown) */
+div[data-baseweb="select"] > div {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: #111827 !important;
+}
+div[data-baseweb="select"] span {
+    color: #111827 !important;
+}
+
+
+/* ==========================================
+   2. DARK MODE OVERRIDES (System Preference)
+   ========================================== */
+@media (prefers-color-scheme: dark) {
+    /* Background */
+    [data-testid="stAppViewContainer"],
+    .stAppViewContainer {
+        background: radial-gradient(
+            circle at top,
+            #373890,
+            #2a2a2b,
+            #1e1e1d
+        ) !important;
+    }
+
+    /* Top Header */
+    [data-testid="stHeader"] {
+        background-color: rgba(0, 0, 0, 0) !important;
+    }
+
+    /* Main Text & Title Styling */
+    h1, h2, h3, h4, h5, h6, .stMarkdown p, [data-testid="stTitle"] {
+        color: #ffffff !important;
+    }
+
+    /* Horizontal Dividers (st.markdown("---")) */
+    hr {
+        border-color: #3a3a3a !important;
+        background-color: #3a3a3a !important;
+    }
+
+    /* Text Input Field */
+    div[data-baseweb="input"] {
+        background-color: #231f1f !important;
+        border: 1px solid #3a3a3a !important;
+    }
+
+    div[data-baseweb="input"] input,
+    .stTextInput input,
+    input[type="text"] {
+        background-color: #231f1f !important;
+        color: #ffffff !important;
+        caret-color: #ffffff !important;
+    }
+
+    div[data-baseweb="input"] input::placeholder,
+    .stTextInput input::placeholder {
+        color: #9ca3af !important;
+    }
+
+    /* Buttons */
+    .stButton > button:not([kind="secondary"]) {
+        background-color: #231f1f !important;
+        color: #ffffff !important;
+        border: 1px solid #3a3a3a !important;
+    }
+    .stButton > button:not([kind="secondary"]):hover {
+        background-color: #2d2929 !important;
+        border: 1px solid #4a4a4a !important;
+    }
+    .stButton > button[kind="primary"] {
+        background-color: #231f1f !important;
+        color: #ffffff !important;
+        border: 1px solid #555555 !important;
+    }
+    .stButton > button[kind="primary"]:hover {
+        background-color: #2d2929 !important;
+        border: 1px solid #666666 !important;
+    }
+
+    /* Progress Bar */
+    .stProgress > div > div > div > div {
+        background-color: #373890 !important;
+    }
+    .stProgress > div > div > div {
+        background-color: #3a3a3a !important;
+    }
+
+    /* Info Cards / Alerts */
+    [data-testid="stNotification"],
+    div[data-baseweb="notification"],
+    .stAlert[data-baseweb="notification"] {
+        background-color: #231f1f !important;
+        border: 1px solid #3a3a3a !important;
+        color: #ffffff !important;
+    }
+
+    /* Spinner (e.g. "Summarizer Agent: Summarizing...") */
+    [data-testid="stSpinner"] {
+        color: #ffffff !important;
+    }
+    [data-testid="stSpinner"] > div {
+        color: #ffffff !important;
+    }
+    [data-testid="stSpinner"] svg {
+        stroke: #ffffff !important;
+    }
+    [data-testid="stSpinner"] p {
+        color: #ffffff !important;
+    }
+
+    /* Status text (e.g. "Retrieving sources...", "Synthesizing report...") */
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stMarkdownContainer"] strong {
+        color: #ffffff !important;
+    }
+
+    /* Expander (Summary Preview) header and body text */
+    .stExpander,
+    .stExpander summary,
+    .stExpander p,
+    .stExpander div,
+    .stExpander span,
+    [data-testid="stExpanderDetails"] p,
+    [data-testid="stExpanderDetails"] div {
+        color: #ffffff !important;
+    }
+    .stExpander {
+        background-color: #231f1f !important;
+        border: 1px solid #3a3a3a !important;
+    }
+
+    /* Inline code / backtick text (e.g. `keyword` in status lines) */
+    code {
+        color: #ffffff !important;
+        background-color: #2d2929 !important;
+    }
+
+    /* Caption text */
+    [data-testid="stCaptionContainer"] {
+        color: #9ca3af !important;
+    }
+
+    /* Sidebar */
+    [data-testid="stSidebar"] {
+        background-color: #1a1a1a !important;
+        border-right: 1px solid #3a3a3a !important;
+    }
+    [data-testid="stSidebar"] * {
+        color: #ffffff !important;
+    }
+
+    /* Text Area (Report Preview) */
+    .stTextArea textarea,
+    textarea,
+    textarea:disabled,
+    .stTextArea textarea:disabled {
+        background-color: #231f1f !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        opacity: 1 !important;
+        border: 1px solid #3a3a3a !important;
+    }
+    .stTextArea label,
+    .stTextArea label p {
+        color: #ffffff !important;
+    }
+
+    /* Select box (Manual Edit dropdown) */
+    div[data-baseweb="select"] > div {
+        background-color: #231f1f !important;
+        border: 1px solid #3a3a3a !important;
+        color: #ffffff !important;
+    }
+    div[data-baseweb="select"] span {
+        color: #ffffff !important;
+    }
+}
