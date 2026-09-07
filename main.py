@@ -51,8 +51,21 @@ st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
 
-LOGO_URL = "https://registry.npmmirror.com/@lobehub/icons-static-png/1.65.0/files/dark/grok.png"
-st.logo(LOGO_URL, size="large")
+st.markdown("""
+<style>
+.theme-logo-dark { display: none; }
+.theme-logo-light { display: block; }
+
+@media (prefers-color-scheme: dark) {
+    .theme-logo-dark { display: block; }
+    .theme-logo-light { display: none; }
+}
+</style>
+<div style="position: fixed; top: 0.6rem; left: 4.5rem; z-index: 999;">
+    <img class="theme-logo-dark" src="https://registry.npmmirror.com/@lobehub/icons-static-png/1.65.0/files/dark/grok.png" width="30">
+    <img class="theme-logo-light" src="https://registry.npmmirror.com/@lobehub/icons-static-png/1.65.0/files/light/grok.png" width="30">
+</div>
+""", unsafe_allow_html=True)
 
 st.title("**Multi-Agent Research Planner**", text_alignment="center")
 st.markdown("Generate comprehensive research reports using AI agents", text_alignment="center")
@@ -495,5 +508,5 @@ st.sidebar.markdown("")
 st.sidebar.markdown("**Agents:**")
 st.sidebar.markdown("- **Planner** - Gemini 3.5 Flash ")
 st.sidebar.markdown("- **Retriever** - Wiki + arXiv")
-st.sidebar.markdown("- **Summarizer** - Llama 3.1B")
-st.sidebar.markdown("- **Synthesizer** - GPT-Oss(120b)")
+st.sidebar.markdown("- **Summarizer** - GPT-Oss(120b)")
+st.sidebar.markdown("- **Synthesizer** - GPT-Oss(20b)")

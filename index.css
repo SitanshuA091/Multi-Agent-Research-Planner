@@ -13,6 +13,13 @@
     background-color: rgba(255, 255, 255, 0) !important;
 }
 
+/* Sidebar toggle button (>> icon - Material Symbols font icon) */
+[data-testid="stHeader"] button,
+[data-testid="stHeader"] [role="button"],
+[data-testid="stHeader"] span {
+    color: rgba(17, 24, 39, 0.7) !important;
+}
+
 /* Main Text & Title Styling */
 h1, h2, h3, h4, h5, h6, .stMarkdown p, [data-testid="stTitle"] {
     color: #111827 !important;
@@ -188,6 +195,13 @@ div[data-baseweb="select"] span {
     /* Top Header */
     [data-testid="stHeader"] {
         background-color: rgba(0, 0, 0, 0) !important;
+    }
+
+    /* Sidebar toggle button (>> icon - Material Symbols font icon) */
+    [data-testid="stHeader"] button,
+    [data-testid="stHeader"] [role="button"],
+    [data-testid="stHeader"] span {
+        color: rgba(255, 255, 255, 0.6) !important;
     }
 
     /* Main Text & Title Styling */
