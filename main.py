@@ -430,7 +430,7 @@ elif st.session_state.stage == 'synthesizing':
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("Generate PDF Report", type="primary", use_container_width=True):
+        if st.button("Generate PDF Report", type="secondary", use_container_width=True):
             with st.spinner("Generating PDF..."):
                 output_dir = Path("outputs")
                 output_dir.mkdir(exist_ok=True)
